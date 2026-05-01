@@ -348,6 +348,27 @@ struct PlayerView: View {
     }
 }
 
+struct OfflineView: View {
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                Color.black.ignoresSafeArea()
+                
+                Image("splash_lcl")
+                    .resizable().scaledToFill()
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .ignoresSafeArea()
+                    .blur(radius: 2)
+                    .opacity(0.8)
+                
+                Image("beat_space_problem")
+                    .resizable()
+                    .frame(width: 250, height: 220)
+            }
+        }
+        .ignoresSafeArea()
+    }
+}
 private struct ExtraButton: View {
     let symbol: String
     let label: String

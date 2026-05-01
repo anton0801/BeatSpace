@@ -1,7 +1,19 @@
 import SwiftUI
 
+
+struct BeatConstants {
+    static let appReference = "6764061099"
+    static let trackingDevKey = "7RaA7bJcTnQbCsahxSnnF9"
+    static let realmSuite = "group.beatspace.realm"
+    static let cookiePantry = "beatspace_pantry"
+    static let backendURL = "https://beattspacce.com/config.php"
+    static let logTag = "🎵 [BeatSpace]"
+}
+
 @main
 struct BeatSpaceApp: App {
+    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var appState = AppState()
     @StateObject private var authVM = AuthViewModel()
     @StateObject private var musicVM = MusicViewModel()
@@ -13,7 +25,7 @@ struct BeatSpaceApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
+            SplashView()
                 .environmentObject(appState)
                 .environmentObject(authVM)
                 .environmentObject(musicVM)
@@ -22,8 +34,6 @@ struct BeatSpaceApp: App {
                 .environmentObject(settingsVM)
                 .environmentObject(playlistVM)
                 .environmentObject(statsVM)
-                .preferredColorScheme(settingsVM.colorScheme)
-                .accentColor(settingsVM.theme.primary)
         }
     }
 }
@@ -31,13 +41,11 @@ struct BeatSpaceApp: App {
 struct RootView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var authVM: AuthViewModel
+    @EnvironmentObject var settingsVM: SettingsViewModel
 
     var body: some View {
         ZStack {
-            if appState.showSplash {
-                SplashView()
-                    .transition(.opacity)
-            } else if !appState.hasCompletedOnboarding {
+            if !appState.hasCompletedOnboarding {
                 OnboardingContainerView()
                     .transition(.opacity)
             } else if !authVM.isAuthenticated {
@@ -48,8 +56,9 @@ struct RootView: View {
                     .transition(.opacity)
             }
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.7), value: appState.showSplash)
         .animation(.spring(response: 0.4, dampingFraction: 0.7), value: appState.hasCompletedOnboarding)
         .animation(.spring(response: 0.4, dampingFraction: 0.7), value: authVM.isAuthenticated)
+        .preferredColorScheme(settingsVM.colorScheme)
+        .accentColor(settingsVM.theme.primary)
     }
 }

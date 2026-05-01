@@ -136,3 +136,85 @@ struct SmartMixView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
+
+struct BeatSpaceApprovalView: View {
+    let viewModel: BeatSpaceViewModel
+    
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack {
+                Color.black.ignoresSafeArea()
+                
+                Image("beat_space")
+                    .resizable().scaledToFill()
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .ignoresSafeArea().opacity(0.9)
+                
+                if geometry.size.width < geometry.size.height {
+                    VStack(spacing: 12) {
+                        Spacer()
+                        titleText
+                            .multilineTextAlignment(.center)
+                        subtitleText
+                            .multilineTextAlignment(.center)
+                        actionButtons
+                    }
+                    .padding(.bottom, 24)
+                } else {
+                    HStack {
+                        Spacer()
+                        VStack(alignment: .leading, spacing: 12) {
+                            Spacer()
+                            titleText
+                            subtitleText
+                        }
+                        Spacer()
+                        VStack {
+                            Spacer()
+                            actionButtons
+                        }
+                        Spacer()
+                    }
+                    .padding(.bottom, 24)
+                }
+            }
+        }
+        .ignoresSafeArea()
+        .preferredColorScheme(.dark)
+    }
+    
+    private var titleText: some View {
+        Text("ALLOW NOTIFICATIONS ABOUT\nBONUSES AND PROMOS")
+            .font(.system(size: 24, weight: .black, design: .rounded))
+            .foregroundColor(.white)
+            .padding(.horizontal, 12)
+    }
+    
+    private var subtitleText: some View {
+        Text("STAY TUNED WITH BEST OFFERS FROM\nOUR CASINO")
+            .font(.system(size: 16, weight: .heavy, design: .rounded))
+            .foregroundColor(.white.opacity(0.7))
+            .padding(.horizontal, 12)
+    }
+    
+    private var actionButtons: some View {
+        VStack(spacing: 12) {
+            Button {
+                viewModel.acceptApproval()
+            } label: {
+                Image("beat_space_bb")
+                    .resizable()
+                    .frame(width: 300, height: 55)
+            }
+            
+            Button {
+                viewModel.deferApproval()
+            } label: {
+                Image("beat_space_bbb")
+                    .resizable()
+                    .frame(width: 275, height: 38)
+            }
+        }
+        .padding(.horizontal, 12)
+    }
+}
